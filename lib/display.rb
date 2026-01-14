@@ -8,7 +8,8 @@ module Display
 
   def self.prompt_move(player_type)
     puts "\nIndicate your next move by row and column (for example, b3)"
-    puts "Player #{player_type}, make your move.\n"
+    puts "Player #{player_type}, make your move: "
+    gets.chomp
   end
 
   def self.display_row_index(index)

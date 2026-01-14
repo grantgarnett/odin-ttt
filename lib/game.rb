@@ -1,10 +1,11 @@
 # This class contains all of the essential functionality
 # for tracking and updating the state of a game of Tic Tac Toe
 class Game
-  attr_reader :game_state
+  attr_reader :game_state, :last_to_play
 
   def initialize
     @game_state = [[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]]
+    @last_to_play = " "
   end
 
   def row_to_num(move_row)
@@ -19,12 +20,13 @@ class Game
   end
 
   def valid_move?(move)
-    (game_state[row_to_num(move[0])][move[1].to_i] == " ")
+    (game_state[row_to_num(move[0])][move[1].to_i - 1] == " ")
   end
 
   def new_move(move, player_type)
     if valid_move?(move)
-      game_state[row_to_num(move[0])][move[1].to_i] = player_type
+      game_state[row_to_num(move[0])][move[1].to_i - 1] = player_type
+      self.last_to_play = player_type
     else
       puts "Invalid input. Please try again."
       false
@@ -73,5 +75,5 @@ class Game
 
   private
 
-  attr_writer :game_state
+  attr_writer :game_state, :last_to_play
 end

@@ -15,5 +15,3 @@ until current_game.game_over?
   )
   Display.display_board(current_game.game_state)
 end
-
-puts "Player #{current_game.last_to_play} wins!!"

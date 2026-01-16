@@ -76,8 +76,19 @@ class Game
        flat_game_arr[4] == flat_game_arr[6]))
   end
 
+  def board_full?
+    @game_state.all? do |row|
+      row.all? { |spot| spot != " " }
+    end
+  end
+
   def game_over?
-    winning_row? || winning_column? || winning_diagonal?
+    if winning_row? || winning_column? || winning_diagonal?
+      puts "Player #{current_game.last_to_play} wins!!"
+      true
+    else
+      board_full?
+    end
   end
 
   private

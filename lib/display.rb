@@ -40,8 +40,4 @@ module Display
 
     print "   -------\n"
   end
-
-  def self.display_winner(game_winner)
-    puts "#{game_winner} got the win."
-  end
 end

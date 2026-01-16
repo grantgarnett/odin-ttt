@@ -25,6 +25,7 @@ class Game
 
   def valid_move?(move)
     (move.length == 2) &&
+      move[1].to_i.positive? &&
       (game_state[row_to_num(move[0])][move[1].to_i - 1] == " ")
   rescue StandardError
     false

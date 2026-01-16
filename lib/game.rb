@@ -1,6 +1,10 @@
+require_relative "display"
+
 # This class contains all of the essential functionality
 # for tracking and updating the state of a game of Tic Tac Toe
 class Game
+  include Display
+
   attr_reader :game_state, :last_to_play
 
   def initialize
@@ -20,17 +24,19 @@ class Game
   end
 
   def valid_move?(move)
-    (game_state[row_to_num(move[0])][move[1].to_i - 1] == " ")
+    (move.length == 2) &&
+      (game_state[row_to_num(move[0])][move[1].to_i - 1] == " ")
+  rescue StandardError
+    false
   end
 
   def new_move(move, player_type)
-    if valid_move?(move)
-      game_state[row_to_num(move[0])][move[1].to_i - 1] = player_type
-      self.last_to_play = player_type
-    else
+    until valid_move?(move)
       puts "Invalid input. Please try again."
-      false
+      move = Display.prompt_move(player_type)
     end
+    game_state[row_to_num(move[0])][move[1].to_i - 1] = player_type
+    self.last_to_play = player_type
   end
 
   def winning_row?

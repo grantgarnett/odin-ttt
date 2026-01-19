@@ -84,7 +84,7 @@ class Game
 
   def game_over?
     if winning_row? || winning_column? || winning_diagonal?
-      puts "Player #{current_game.last_to_play} wins!!"
+      puts "Player #{last_to_play} wins!!"
       true
     else
       board_full?

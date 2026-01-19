@@ -2,6 +2,7 @@ require_relative "lib/display"
 require_relative "lib/game"
 
 current_game = Game.new
+Display.display_board(current_game.game_state)
 
 until current_game.game_over?
   current_game.new_move(

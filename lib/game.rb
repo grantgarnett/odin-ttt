@@ -5,43 +5,54 @@ require_relative "display"
 class Game
   include Display
 
-  attr_reader :game_state, :last_to_play
+  attr_reader :game_state
 
   def initialize
     @game_state = [[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]]
-    @last_to_play = " "
+    @current_player = "X"
+    @other_player = "O"
+  end
+
+  def play
+    Display.display_board(@game_state)
+
+    until game_over?
+      new_move(Display.prompt_move(@current_player))
+      Display.display_board(@game_state)
+      @current_player, @other_player = @other_player, @current_player
+    end
   end
 
   def row_to_num(move_row)
     case move_row # rubocop:disable Style/HashLikeCase
-    when "a"
-      0
-    when "b"
-      1
-    when "c"
-      2
+    when "a" then 0
+    when "b" then 1
+    when "c" then 2
     end
   end
 
   def valid_move?(move)
     (move.length == 2) &&
       move[1].to_i.positive? &&
-      (game_state[row_to_num(move[0])][move[1].to_i - 1] == " ")
+      (@game_state[row_to_num(move[0])][move[1].to_i - 1] == " ")
   rescue StandardError
     false
   end
 
-  def new_move(move, player_type)
+  def verify_move(move)
     until valid_move?(move)
       puts "Invalid input. Please try again."
-      move = Display.prompt_move(player_type)
+      move = Display.prompt_move(@current_player)
     end
-    game_state[row_to_num(move[0])][move[1].to_i - 1] = player_type
-    self.last_to_play = player_type
+  end
+
+  def new_move(move)
+    verify_move(move)
+    @game_state[row_to_num(move[0])][move[1].to_i - 1] = @current_player
   end
 
   def winning_row?
-    game_state.each do |row|
+    @game_state.each do |row|
       next unless row[0] != " " &&
                   row[0] == row[1] &&
                   row[0] == row[2]
@@ -70,9 +81,9 @@ class Game
     flat_game_arr = @game_state.flatten
 
     flat_game_arr[4] != " " &&
-      ((flat_game_arr[4] == flat_game_arr[0] &&
+      ((flat_game_arr[0] == flat_game_arr[4] &&
        flat_game_arr[4] == flat_game_arr[8]) ||
-       (flat_game_arr[4] == flat_game_arr[2] &&
+       (flat_game_arr[2] == flat_game_arr[4] &&
        flat_game_arr[4] == flat_game_arr[6]))
   end
 
@@ -84,14 +95,10 @@ class Game
 
   def game_over?
     if winning_row? || winning_column? || winning_diagonal?
-      puts "Player #{last_to_play} wins!!"
+      puts "Player #{@current_player} wins!!"
       true
     else
       board_full?
     end
   end
-
-  private
-
-  attr_writer :game_state, :last_to_play
 end
